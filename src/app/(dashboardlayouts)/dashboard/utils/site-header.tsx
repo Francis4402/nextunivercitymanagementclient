@@ -6,13 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { logout } from "@/services/AuthServices"
+import { useUser } from "@/context/UserContext"
 import { useRouter } from "next/navigation"
 
 export function SiteHeader() {
+  const { setUser } = useUser();
   const router = useRouter();
   
   const handleLogout = async () => {
     await logout();
+    setUser(null);
     router.push("/");
   }
 

@@ -19,36 +19,36 @@ const baseQuery = fetchBaseQuery({
     },
 });
 
-// const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (args, api, extraOptions): Promise<any> => {
-//     const result = await baseQuery(args, api, extraOptions);
+const baseQueryWithRefreshToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (args, api, extraOptions): Promise<any> => {
+    const result = await baseQuery(args, api, extraOptions);
     
-//     if (result.error?.status === 401) {
-//         try {
-//             const refreshRes = await fetch(`${baseUrl}/auth/refresh-token`, {
-//                 method: "POST",
-//                 credentials: "include"
-//             });
+    if (result.error?.status === 401) {
+        try {
+            const refreshRes = await fetch(`${baseUrl}/auth/refresh-token`, {
+                method: "POST",
+                credentials: "include"
+            });
 
-//             if (refreshRes.ok) {
-//                 const refreshData = await refreshRes.json();
+            if (refreshRes.ok) {
+                const refreshData = await refreshRes.json();
                 
-//                 if (refreshData.accessToken) {
-//                     Cookies.set("accessToken", refreshData.accessToken);
-//                 }
+                if (refreshData.accessToken) {
+                    Cookies.set("accessToken", refreshData.accessToken);
+                }
                 
-//                 const retryResult = await baseQuery(args, api, extraOptions);
-//                 return retryResult;
-//             }
-//         } catch (error) {
-//             console.error("Refresh token failed:", error);
-//         }
-//     }
+                const retryResult = await baseQuery(args, api, extraOptions);
+                return retryResult;
+            }
+        } catch (error) {
+            console.error("Refresh token failed:", error);
+        }
+    }
     
-//     return result;
-// }
+    return result;
+}
 
 export const baseApi = createApi({
     reducerPath: "baseApi",
-    baseQuery: baseQuery,
+    baseQuery: baseQueryWithRefreshToken,
     endpoints: () => ({})
 })

@@ -1,16 +1,25 @@
-"use client"
+import { getAllSemesters } from "@/services/AcademicSemester"
+import { IAcademicSemester } from "@/types/academicsemestertype";
 
-import { useGetAllSemestersQuery } from '@/redux/features/academicSemester/academicSemesterApi'
 
+const AcademicSemester = async () => {
 
-const AcademicSemester = () => {
+  const semesters = await getAllSemesters();
 
-  const { data } = useGetAllSemestersQuery(undefined);
-
-  console.log(data);
+  const semesterData: IAcademicSemester[] = semesters.data;
 
   return (
-    <div>AcademicSemester</div>
+    <div>
+      {
+        semesterData.map((semester, index) => {
+          return (
+            <div key={index}>
+              {semester.name}
+            </div>
+          )
+        })
+      }
+    </div>
   )
 }
 

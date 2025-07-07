@@ -1,11 +1,17 @@
 "use client"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ASemesterValidationSchema } from '../VSchemas/ASemesterValidation'
+import { createAcademicSemester } from '@/services/AcademicSemester'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { IAcademicSemester } from '@/types/academicsemestertype'
 
 
 const semesterCodeMapping = {
@@ -17,10 +23,13 @@ const semesterCodeMapping = {
 const AcademicSemesterForm = () => {
 
 
-    const form = useForm();
+    const form = useForm({
+        resolver: zodResolver(ASemesterValidationSchema)
+    });
 
     const {formState: { isSubmitting }, watch, setValue} = form;
     
+    const router = useRouter();
 
     const selectedName = watch('name');
     
@@ -31,8 +40,19 @@ const AcademicSemesterForm = () => {
         }
     }, [selectedName, setValue]);
     
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
+    const onSubmit = async (academicData: IAcademicSemester) => {
+        try {
+            const res = await createAcademicSemester(academicData);
+
+            if (res?.success) {
+                toast.success(res?.message);
+                router.push("/dashboard/academic-semester");
+            } else {
+                toast.error(res?.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
   return (
