@@ -16,12 +16,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { NavMain } from "./nav-main"
 import { NavRoutes } from "./nav-routes"
-
+import { useUser } from "@/context/UserContext"
 
 
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
+    const {user} = useUser();
+
+    console.log(user);
 
     const navRoutes = [
         {
@@ -77,10 +80,13 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
           title: "Student",
           url: "/dashboard/create-student",
         },
-        {
-          title: "Admin",
-          url: "/dashboard/create-admin",
-        }
+        ...(user?.role === "superAdmin"
+          ? [{
+            title: "Admin",
+            url: "/dashboard/create-admin",
+          },]
+          : [           
+          ]),
       ],
     }
   ];

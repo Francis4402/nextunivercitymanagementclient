@@ -1,14 +1,19 @@
 "use client"
 
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/context/UserContext";
+import Link from "next/link";
+
 
 
 export default function Home() {
 
+  const {user} = useUser();
 
 
   return (
     <div>
-      {/* {!user ? (
+      {!user ? (
         
         <div className="flex gap-4 items-center justify-center py-10">
         <Link href="/login">
@@ -21,7 +26,7 @@ export default function Home() {
       </div>
       ) : <div><Link href={"/dashboard"}>
       <Button>{user?.role}</Button>
-    </Link></div>} */}
+    </Link></div>}
     </div>
   );
 }

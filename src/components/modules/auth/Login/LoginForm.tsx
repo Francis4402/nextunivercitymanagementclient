@@ -15,23 +15,16 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "./loginValidation"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { loginUser } from "@/services/AuthServices"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useLoginMutation } from "@/redux/features/auth/authApi"
-import { useAppDispatch } from "@/redux/hooks"
-import { setUser } from "@/redux/features/auth/authSlice"
-import { verifyToken } from "@/app/utils/verifyToken"
-
+import { useUser } from "@/context/UserContext"
 
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
-  const [login, { isLoading }] = useLoginMutation();
-
-  const dispatch = useAppDispatch();
 
   const form = useForm({
     resolver: zodResolver(loginSchema),
@@ -42,35 +35,25 @@ export function LoginForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirectPath");
+  const { refreshUser } = useUser();
 
-
-  const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
+      const res = await loginUser(data);
 
-      const userInfo = {
-        id: formData.id,
-        password: formData.password
-      }
-
-      const result = await login(userInfo).unwrap();
-
-      if (result.data.success) {
-        toast.success("Login successful");
-
+      if (res?.success) {
+        toast.success(res?.message);
+        await refreshUser();
         if (redirect) {
           router.push(redirect);
         } else {
-          router.push("/dashboard");
+          router.push("/");
         }
-      } 
-
-      const user = verifyToken(result.data.accessToken);
-
-      dispatch(setUser({user: user, token: result.data.accessToken}));
-
+      } else {
+        toast.error(res?.message);
+      }
     } catch (error) {
-      console.error("Login error:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      console.log(error);
     }
   }
 
@@ -107,10 +90,10 @@ export function LoginForm({
                   )} />
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
-                    { isLoading ? "Logging in..." : "Login" }
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    { isSubmitting ? "Logging in..." : "Login" }
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full" disabled={isSubmitting}>
                     Login with Google
                   </Button>
                 </div>
