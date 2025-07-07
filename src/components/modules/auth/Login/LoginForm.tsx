@@ -47,7 +47,7 @@ export function LoginForm({
         if (redirect) {
           router.push(redirect);
         } else {
-          router.push("/");
+          router.push("/dashboard");
         }
       } else {
         toast.error(res?.message);

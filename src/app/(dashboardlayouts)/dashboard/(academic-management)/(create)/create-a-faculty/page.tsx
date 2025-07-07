@@ -1,8 +1,11 @@
 import React from 'react'
+import AFacultyForm from '../../../utils/(forms)/AFacultyForm'
 
 const CreateAFaculty = () => {
   return (
-    <div>CreateAFaculty</div>
+    <div className="flex items-center justify-center mt-20">
+      <AFacultyForm />
+    </div>
   )
 }
 
