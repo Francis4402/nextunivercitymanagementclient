@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { getAllSemesters } from "@/services/AcademicSemester"
 import { IAcademicSemester } from "@/types/academicsemestertype";
-import { DataTable } from "./table";
 import { ColumnDef } from "@tanstack/react-table";
+import { ASemesterTable } from "./table";
+
+
 
 const AcademicSemester = () => {
   const [semesterData, setSemesterData] = useState<IAcademicSemester[]>([]);
@@ -45,7 +47,7 @@ const AcademicSemester = () => {
   
   return (
     <div className="mt-10">
-      <DataTable columns={columns} data={semesterData} />
+      <ASemesterTable columns={columns} data={semesterData} />
     </div>
   )
 }

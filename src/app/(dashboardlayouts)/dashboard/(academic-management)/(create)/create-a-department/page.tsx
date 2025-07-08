@@ -1,8 +1,10 @@
-import React from 'react'
+import Adepartmentform from '../../../utils/(forms)/Adepartmentform'
 
 const CreateADepartment = () => {
   return (
-    <div>CreateADepartment</div>
+    <div className="flex items-center justify-center mt-20">
+      <Adepartmentform />
+    </div>
   )
 }
 

@@ -1,33 +1,31 @@
 "use server"
 
-import { getValidToken } from "@/lib/verifyToken";
-import { IAcademicSemester } from "@/types/academicsemestertype";
+import { getValidToken } from "@/lib/verifyToken"
+import { IAdepartment } from "@/types/adepartmenttype";
 import { revalidateTag } from "next/cache";
 
 
-
-export const getAllSemesters = async () => {
+export const getAllDepartments = async () => {
     try {
-
         const token = await getValidToken();
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-semesters`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments`, {
             method: "GET",
             headers: {
                 'Authorization': `${token}`,
                 'Content-Type': 'application/json',
             },
             next: {
-                tags: ["academicSemesters"]
-            },
+                tags: ["academicDepartments"]
+            }
         });
 
         if (!res.ok) {
             if (res.status === 401) {
-              throw new Error('Unauthorized - Invalid access token');
+                throw new Error('Unauthorized - Invalid access token');
             }
             throw new Error(`Failed to fetch: ${res.statusText}`);
-          }
+        }
 
         const data = await res.json();
         return data;
@@ -36,23 +34,23 @@ export const getAllSemesters = async () => {
     }
 }
 
-
-export const createAcademicSemester = async (academicData: IAcademicSemester) => {
+export const createADepartment = async (departmentData: IAdepartment) => {
     const token = await getValidToken();
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-semesters/create-academic-semester`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments/create-academic-department`, {
             method: "POST",
-            body: JSON.stringify(academicData),
+            body: JSON.stringify(departmentData),
             headers: {
                 'Authorization': `${token}`,
                 'Content-Type': 'application/json',
-            },
+            }
         });
 
-        revalidateTag("academicSemesters");
+        revalidateTag("academicDepartments");
 
         return res.json();
+
     } catch (error) {
         console.log(error);
     }
