@@ -1,8 +1,11 @@
-import React from 'react'
+import CreateStudentForm from "../../utils/(forms)/CreateStudentForm"
+
 
 const CreateStudent = () => {
   return (
-    <div>CreateStudent</div>
+    <div>
+      <CreateStudentForm />
+    </div>
   )
 }
 
