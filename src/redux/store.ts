@@ -1,22 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit"
-import authReducer from "./features/auth/authSlice"
 import { baseApi } from "./api/baseApi"
 
-import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer } from 'redux-persist'
-import storage from "./storage"
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 
 
-const persistOptions = {
-    key: "auth",
-    storage,
-}
 
-const persistedAuth = persistReducer(persistOptions, authReducer);
+// const persistOptions = {
+//     key: "auth",
+//     storage,
+// }
+
+// const persistedAuth = persistReducer(persistOptions, authReducer);
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            auth: persistedAuth,
+
             [baseApi.reducerPath]: baseApi.reducer,
         },
         middleware: (getDefaultMiddleware) =>

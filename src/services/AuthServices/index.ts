@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
-
+import { getValidToken } from "@/lib/verifyToken"
 
 
 export const loginUser = async (userData: FieldValues) => {
@@ -34,13 +34,15 @@ export const loginUser = async (userData: FieldValues) => {
 
 export const createStudent = async (data: FormData) => {
 
-
     try {
+        const token = await getValidToken();
+        
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users/create-student`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': `${token}`,
             },
+
             body: data,
         });
 
