@@ -1,7 +1,7 @@
 
 export interface TUserName {
     firstName: string;
-    middleName: string;
+    middleName?: string;
     lastName: string;
 }
 
@@ -21,14 +21,14 @@ export interface ILocalGuardian {
     address: string;
 }
 
-export interface IStudent {
-    id: string;
-    user: string;
+
+export interface IStudentForm {
     name: TUserName;
     gender: 'male' | 'female' | 'other';
     dateOfBirth?: string;
     email: string;
     contactNo: string;
+    profileImg?: string;
     emergencyContactNo: string;
     bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
@@ -37,4 +37,20 @@ export interface IStudent {
     localGuardian: ILocalGuardian;
     admissionSemester: string;
     academicDepartment: string;
+}
+
+
+export interface ICreateStudentPayload {
+    password?: string;
+    student: IStudentForm;
+}
+
+
+export interface IStudent extends IStudentForm {
+    password?: string;
+    id: string;
+    user: string;
+    createdAt?: string;
+    updatedAt?: string;
+    isDeleted?: boolean;
 }

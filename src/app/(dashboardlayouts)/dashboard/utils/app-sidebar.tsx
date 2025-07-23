@@ -73,16 +73,16 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
       icon: PanelsTopLeft,
       items: [
         {
-          title: "Faculty",
+          title: "Create Faculty",
           url: "/dashboard/create-faculty",
         },
         {
-          title: "Student",
+          title: "Create Student",
           url: "/dashboard/create-student",
         },
         ...(user?.role === "superAdmin"
           ? [{
-            title: "Admin",
+            title: "Create Admin",
             url: "/dashboard/create-admin",
           },]
           : [           

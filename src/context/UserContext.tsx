@@ -1,3 +1,5 @@
+"use client"
+
 import { getCurrentUser } from "@/services/AuthServices";
 import { IUser } from "@/types/user";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
