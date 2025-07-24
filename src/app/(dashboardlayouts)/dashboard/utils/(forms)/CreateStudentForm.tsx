@@ -167,7 +167,6 @@ const CreateStudentForm = () => {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10 w-full">
                         
-
                         <div className='flex flex-col items-center justify-center space-y-5 text-center'>
                             <h1 className='border-b w-full'>Profile Image</h1>
                             <div className='flex flex-col items-center space-y-4'>

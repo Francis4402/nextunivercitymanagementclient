@@ -50,7 +50,5 @@ export interface IStudent extends IStudentForm {
     password?: string;
     id: string;
     user: string;
-    createdAt?: string;
-    updatedAt?: string;
     isDeleted?: boolean;
 }
