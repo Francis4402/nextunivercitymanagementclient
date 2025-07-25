@@ -27,7 +27,7 @@ const studentFacultyDummyData: IFacultyPayload = {
     "faculty": {
         "designation":"Lecturer",
         "name": {
-            "firstName": "francis ",
+            "firstName": "Francis ",
             "middleName": "m",
             "lastName": "n"
         },
