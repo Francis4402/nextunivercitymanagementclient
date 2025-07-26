@@ -2,6 +2,7 @@
 
 import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
+import { IAdmin } from "@/types/user";
 
 
 export const createAdmin = async (data: FormData) => {
@@ -90,7 +91,7 @@ export const getSingleAdmin = async (id: string) => {
 
 
 
-export const updateAdmins = async (adminData: { name: string }, adminId: string) => {
+export const updateAdmins = async (adminData: Partial<IAdmin>, adminId: string) => {
     const token = await getValidToken();
   
     try {

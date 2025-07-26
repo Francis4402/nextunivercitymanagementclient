@@ -91,17 +91,22 @@ export const updateDepartments = async (departmentData: { name: string }, depart
     const token = await getValidToken();
   
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins/${departmentId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments/${departmentId}`, {
         method: "PATCH",
         headers: {
-          'Authorization': `${token}`,
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`
         },
         body: JSON.stringify(departmentData),
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
   
       revalidateTag("academicDepartments");
   
-      return res.json();
+      return await res.json();
     } catch (error) {
       console.log(error);
     }

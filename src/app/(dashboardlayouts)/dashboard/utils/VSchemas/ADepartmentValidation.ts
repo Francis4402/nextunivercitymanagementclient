@@ -7,5 +7,5 @@ export const ADepartmentValidationSchema = z.object({
     }),
     academicFaculty: z.string({
         message: "Please select a faculty"
-    })
+    }).optional()
 })

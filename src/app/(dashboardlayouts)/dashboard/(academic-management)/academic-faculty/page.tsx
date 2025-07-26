@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 
 import React, { useEffect, useState } from 'react'
@@ -6,7 +6,7 @@ import { IAfaculty } from '@/types/afacultytype'
 import { ColumnDef } from '@tanstack/react-table'
 import { getAllFaculties, updateFaculties } from '@/services/AFaculty'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AFacultyValidationSchema } from '@/app/(dashboardlayouts)/dashboard/utils/VSchemas/AFacultyValidation'
@@ -44,7 +44,7 @@ const AFaculty = () => {
     setOpen(true);
   };
 
-  const handleUpdateSubmit = async (data: any) => {
+  const handleUpdateSubmit = async (data: IAfaculty) => {
     if (!selectedFaculty) return;
   
     try {
@@ -62,12 +62,12 @@ const AFaculty = () => {
       console.error("Update failed", error);
     }
   };
-  
+
 
   const columns: ColumnDef<IAfaculty>[] = [
     {
       accessorKey: "name",
-      header: "Faculty Name",
+      header: "Department Name",
       cell: ({ row }) => <div className="text-left">{row.getValue("name")}</div>,
     },
     {
@@ -92,7 +92,7 @@ const AFaculty = () => {
           </Button>
         );
       }
-    }
+    },
   ]
 
   return (
@@ -115,12 +115,9 @@ const AFaculty = () => {
                 </FormItem>
               )} />
               <div className="pt-4 flex gap-2">
-                <Button type="submit" className="w-full h-10 text-sm font-medium" disabled={updateForm.formState.isSubmitting}>
+                <Button type="submit" variant={"outline"} className="w-full h-10 text-sm font-medium" disabled={updateForm.formState.isSubmitting}>
                   {updateForm.formState.isSubmitting ? 'Updating...' : 'Update'}
                 </Button>
-                <SheetClose asChild>
-                  <Button type="button" variant="outline" className="w-full h-10 text-sm font-medium">Cancel</Button>
-                </SheetClose>
               </div>
             </form>
           </Form>

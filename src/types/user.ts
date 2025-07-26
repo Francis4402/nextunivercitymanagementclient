@@ -26,6 +26,7 @@ export interface IAdmin {
 }
 
 export interface IAdminPayload {
+  _id?: string;
   password?: string;
   admin: IAdmin;
 }
