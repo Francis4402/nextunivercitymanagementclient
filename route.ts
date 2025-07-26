@@ -12,7 +12,10 @@ export const superAdminRoutes = [
     "/dashboard/academic-faculty", 
     "/dashboard/create-a-faculty", 
     "/dashboard/academic-department", 
-    "/dashboard/create-a-department"
+    "/dashboard/create-a-department",
+    "/dashboard/students",
+    "/dashboard/faculties",
+    "/dashboard/admins"
 ]
 
 export const adminRoutes = [
@@ -25,7 +28,10 @@ export const adminRoutes = [
     "/dashboard/academic-faculty", 
     "/dashboard/create-a-faculty", 
     "/dashboard/academic-department", 
-    "/dashboard/create-a-department"
+    "/dashboard/create-a-department",
+    "/dashboard/students",
+    "/dashboard/faculties",
+    "/dashboard/admins"
 ]
 
 export const authRoutes = [

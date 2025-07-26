@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function ADepartMentTable<TData, TValue>({
+export function DashboardTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

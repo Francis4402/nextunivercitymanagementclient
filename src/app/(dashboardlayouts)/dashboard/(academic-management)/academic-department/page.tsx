@@ -4,7 +4,7 @@ import { getAllDepartments } from '@/services/ADepartment';
 import { IAdepartment } from '@/types/adepartmenttype';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useEffect, useState } from 'react'
-import { ADepartMentTable } from './table';
+import { DashboardTable } from '../../utils/table';
 
 const ADepartment = () => {
 
@@ -38,7 +38,7 @@ const ADepartment = () => {
 
   return (
     <div className="mt-10">
-      <ADepartMentTable columns={columns} data={departmentData} />
+      <DashboardTable columns={columns} data={departmentData} />
     </div>
   )
 }

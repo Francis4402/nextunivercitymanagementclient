@@ -81,31 +81,31 @@ const CreateFaculty = () => {
     const {formState: { isSubmitting }} = form;
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
+            const file = event.target.files?.[0];
+            if (file) {
 
-        if (!file.type.startsWith('image/')) {
-            toast.error('Please select a valid image file');
-            return;
+            if (!file.type.startsWith('image/')) {
+                toast.error('Please select a valid image file');
+                return;
+            }
+
+
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                toast.error('File size should be less than 5MB');
+                return;
+            }
+
+            setSelectedFile(file);
+            
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setFilePreview(e.target?.result as string);
+            };
+            reader.readAsDataURL(file);
         }
-
-
-        const maxSize = 5 * 1024 * 1024;
-        if (file.size > maxSize) {
-            toast.error('File size should be less than 5MB');
-            return;
-        }
-
-        setSelectedFile(file);
-        
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setFilePreview(e.target?.result as string);
-        };
-        reader.readAsDataURL(file);
-    }
-};
+    };
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {

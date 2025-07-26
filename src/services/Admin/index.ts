@@ -1,23 +1,24 @@
 "use server"
 
-import { getValidToken } from "@/lib/verifyToken"
-import { IAdepartment } from "@/types/adepartmenttype";
+import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
 
 
-export const createADepartment = async (departmentData: IAdepartment) => {
-    const token = await getValidToken();
+export const createAdmin = async (data: FormData) => {
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments/create-academic-department`, {
+        const token = await getValidToken();
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users/create-admin`, {
             method: "POST",
             headers: {
                 'Authorization': `${token}`,
             },
-            body: JSON.stringify(departmentData)
+
+            body: data
         });
 
-        revalidateTag("academicDepartments");
+        revalidateTag("admin");
 
         return res.json();
 
@@ -27,18 +28,49 @@ export const createADepartment = async (departmentData: IAdepartment) => {
 }
 
 
-export const getAllDepartments = async () => {
+export const getAllAdmins = async () => {
     try {
+
         const token = await getValidToken();
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins`, {
             method: "GET",
             headers: {
                 'Authorization': `${token}`,
                 'Content-Type': 'application/json',
             },
             next: {
-                tags: ["academicDepartments"]
+                tags: ["admin"]
+            },
+        });
+
+        if (!res.ok) {
+            if (res.status === 401) {
+              throw new Error('Unauthorized - Invalid access token');
+            }
+            throw new Error(`Failed to fetch: ${res.statusText}`);
+          }
+
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+export const getSingleAdmin = async (id: string) => {
+    try {
+        const token = await getValidToken();
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`,
+            },
+            next: {
+                tags: ["admin"]
             }
         });
 
@@ -56,50 +88,41 @@ export const getAllDepartments = async () => {
     }
 }
 
-export const getSingleDepartments = async (id: string) => {
-    try {
-        const token = await getValidToken();
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-departments/${id}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${token}`,
-            },
-            next: {
-                tags: ["academicDepartments"]
-            }
-        });
-
-        if (!res.ok) {
-            if (res.status === 401) {
-                throw new Error('Unauthorized - Invalid access token');
-            }
-            throw new Error(`Failed to fetch: ${res.statusText}`);
-        }
-
-        const data = await res.json();
-        return data;
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 
-
-export const updateDepartments = async (departmentData: { name: string }, departmentId: string) => {
+export const updateAdmins = async (adminData: { name: string }, adminId: string) => {
     const token = await getValidToken();
   
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins/${departmentId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins/${adminId}`, {
         method: "PATCH",
         headers: {
           'Authorization': `${token}`,
         },
-        body: JSON.stringify(departmentData),
+        body: JSON.stringify(adminData),
       });
   
-      revalidateTag("academicDepartments");
+      revalidateTag("admin");
+  
+      return res.json();
+    } catch (error) {
+      console.log(error);
+    }
+};
+
+
+export const deleteAdmin = async (adminId: string) => {
+    const token = await getValidToken();
+  
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/admins/${adminId}`, {
+        method: "DELETE",
+        headers: {
+          'Authorization': `${token}`,
+        },
+      });
+  
+      revalidateTag("admin");
   
       return res.json();
     } catch (error) {

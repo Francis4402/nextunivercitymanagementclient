@@ -1,8 +1,11 @@
-import React from 'react'
+
+import CreateAdminForm from "../../utils/(forms)/CreateAdminForm"
 
 const CreateAdmin = () => {
   return (
-    <div>CreateAdmin</div>
+    <div>
+      <CreateAdminForm />
+    </div>
   )
 }
 

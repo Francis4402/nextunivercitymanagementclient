@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getAllSemesters } from "@/services/AcademicSemester"
 import { IAcademicSemester } from "@/types/academicsemestertype";
 import { ColumnDef } from "@tanstack/react-table";
-import { ASemesterTable } from "./table";
+import { DashboardTable } from "../../utils/table";
 
 
 
@@ -47,7 +47,7 @@ const AcademicSemester = () => {
   
   return (
     <div className="mt-10">
-      <ASemesterTable columns={columns} data={semesterData} />
+      <DashboardTable columns={columns} data={semesterData} />
     </div>
   )
 }

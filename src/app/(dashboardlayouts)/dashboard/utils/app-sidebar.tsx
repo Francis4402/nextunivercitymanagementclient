@@ -1,6 +1,6 @@
 "use client"
 
-import { BookOpenCheck, LayoutDashboard, PanelsTopLeft } from "lucide-react"
+import { BookOpenCheck, Boxes, LayoutDashboard, PanelsTopLeft, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -33,6 +33,24 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
           icon: LayoutDashboard,
           isActive: true,
         },
+        {
+          title: "Students",
+          url: "/dashboard/students",
+          icon: Users,
+          isActive: false,
+        },
+        {
+          title: "Faculties",
+          url: "/dashboard/faculties",
+          icon: Boxes,
+          isActive: false,
+        },
+        {
+          title: "Admins",
+          url: "/dashboard/admins",
+          icon: User2,
+          isActive: false,
+        }
       ];
 
     const navMain = [
@@ -88,7 +106,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
           : [           
           ]),
       ],
-    }
+    },
   ];
 
   return (

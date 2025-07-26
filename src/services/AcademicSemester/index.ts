@@ -37,6 +37,37 @@ export const getAllSemesters = async () => {
 }
 
 
+export const getSingleSemesters = async (id: string) => {
+    try {
+        const token = await getValidToken();
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/academic-semesters/${id}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`,
+            },
+            next: {
+                tags: ["academicSemesters"]
+            }
+        });
+
+        if (!res.ok) {
+            if (res.status === 401) {
+                throw new Error('Unauthorized - Invalid access token');
+            }
+            throw new Error(`Failed to fetch: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
 export const createAcademicSemester = async (academicData: IAcademicSemester) => {
     const token = await getValidToken();
 

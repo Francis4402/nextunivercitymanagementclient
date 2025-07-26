@@ -2,10 +2,9 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import { AFacultyTable } from './table'
 import { IAfaculty } from '@/types/afacultytype'
 import { ColumnDef } from '@tanstack/react-table'
-import { getAllFaculties, updateAFaculty } from '@/services/AFaculty'
+import { getAllFaculties, updateFaculties } from '@/services/AFaculty'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet'
 import { useForm } from 'react-hook-form'
@@ -14,6 +13,7 @@ import { AFacultyValidationSchema } from '@/app/(dashboardlayouts)/dashboard/uti
 import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { toast } from 'sonner'
+import { DashboardTable } from '../../utils/table'
 
 
 const AFaculty = () => {
@@ -48,7 +48,7 @@ const AFaculty = () => {
     if (!selectedFaculty) return;
   
     try {
-      await updateAFaculty({ name: data.name }, selectedFaculty._id!);
+      await updateFaculties({ name: data.name }, selectedFaculty._id!);
   
       const updatedFaculties = await getAllFaculties();
       setFacultyData(updatedFaculties.data);
@@ -87,7 +87,7 @@ const AFaculty = () => {
       cell: ({ row }) => {
         const faculty = row.original;
         return (
-          <Button variant="outline" className="w-full" onClick={() => handleUpdateClick(faculty)}>
+          <Button variant="outline" size={"sm"} className="w-full" onClick={() => handleUpdateClick(faculty)}>
             Update
           </Button>
         );
@@ -97,7 +97,7 @@ const AFaculty = () => {
 
   return (
     <div className="rounded-md border">
-      <AFacultyTable columns={columns} data={facultyData} />
+      <DashboardTable columns={columns} data={facultyData} />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="right">
           <SheetHeader>
