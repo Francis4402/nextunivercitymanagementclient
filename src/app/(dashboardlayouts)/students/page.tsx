@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table';
 import { DashboardTable } from '../utils/table';
 import Image from 'next/image';
+import { TUserName } from '@/types/user';
 
 const Students = () => {
 
@@ -18,7 +19,6 @@ const Students = () => {
   }, []);
 
   
-  console.log(students);
 
 
   const columns: ColumnDef<ICreateStudentPayload>[] = [
@@ -36,9 +36,15 @@ const Students = () => {
       </div>,
     },
     {
-      accessorKey: "fullName",
+      accessorKey: "name",
       header: "Full Name",
-      cell: ({ row }) => <div className="text-left">{row.getValue("fullName")}</div>,
+      cell: ({ row }) => {
+        const value = row.getValue("name") as TUserName;
+        const fullName = value
+        ? `${value.firstName} ${value.middleName} ${value.lastName}`
+        : "N/A";
+        return <div className="text-left">{fullName}</div>;
+      }
     },
     {
       accessorKey: "email",

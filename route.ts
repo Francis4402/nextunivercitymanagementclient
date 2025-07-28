@@ -1,37 +1,68 @@
-export const publicRoutes = [
+
+export const studentRoutes = [
     "/",
+    
 ]
 
+export const facultyRoutes = [
+    "/", 
+    "/create-faculty", 
+    "/create-student", 
+    "/create-admin", 
+    "/academic-semester", 
+    "/create-a-semester", 
+    "/academic-faculty", 
+    "/create-a-faculty", 
+    "/create-course",
+    "/semesters",
+    "/semester-registration",
+    "/create-offered-courses",
+    "/academic-department", 
+    "/create-a-department",
+    "/students",
+    "/faculties",
+    "/admins"
+]
+
+
 export const superAdminRoutes = [
-    "/dashboard", 
-    "/dashboard/create-faculty", 
-    "/dashboard/create-student", 
-    "/dashboard/create-admin", 
-    "/dashboard/academic-semester", 
-    "/dashboard/create-a-semester", 
-    "/dashboard/academic-faculty", 
-    "/dashboard/create-a-faculty", 
-    "/dashboard/academic-department", 
-    "/dashboard/create-a-department",
-    "/dashboard/students",
-    "/dashboard/faculties",
-    "/dashboard/admins"
+    "/", 
+    "/create-faculty", 
+    "/create-student", 
+    "/create-admin", 
+    "/academic-semester", 
+    "/create-a-semester", 
+    "/academic-faculty", 
+    "/create-a-faculty", 
+    "/create-course",
+    "/semesters",
+    "/semester-registration",
+    "/create-offered-courses",
+    "/academic-department", 
+    "/create-a-department",
+    "/students",
+    "/faculties",
+    "/admins"
 ]
 
 export const adminRoutes = [
-    "/dashboard", 
-    "/dashboard/create-faculty", 
-    "/dashboard/create-student", 
-    "/dashboard/create-admin", 
-    "/dashboard/academic-semester", 
-    "/dashboard/create-a-semester", 
-    "/dashboard/academic-faculty", 
-    "/dashboard/create-a-faculty", 
-    "/dashboard/academic-department", 
-    "/dashboard/create-a-department",
-    "/dashboard/students",
-    "/dashboard/faculties",
-    "/dashboard/admins"
+    "/", 
+    "/create-faculty", 
+    "/create-student", 
+    "/create-admin", 
+    "/academic-semester", 
+    "/create-a-semester", 
+    "/academic-faculty", 
+    "/create-a-faculty", 
+    "/create-course",
+    "/semesters",
+    "/semester-registration",
+    "/create-offered-courses",
+    "/academic-department", 
+    "/create-a-department",
+    "/students",
+    "/faculties",
+    "/admins"
 ]
 
 export const authRoutes = [
@@ -40,4 +71,4 @@ export const authRoutes = [
 ]
 
 
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/";

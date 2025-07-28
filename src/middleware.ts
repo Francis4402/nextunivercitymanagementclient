@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { adminRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes, superAdminRoutes } from "../route";
+import { adminRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT, facultyRoutes, studentRoutes, superAdminRoutes } from "../route";
 
 
 const roleBasedRoutes: Record<string, string[]> = {
   superAdmin: superAdminRoutes,
   admin: adminRoutes,
+  student: studentRoutes,
+  faculty: facultyRoutes,
 };
 
 export const middleware = async (request: NextRequest) => {
@@ -30,7 +32,6 @@ export const middleware = async (request: NextRequest) => {
     }
   }
 
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
 
   const isAuthRoute = authRoutes.some((route) =>
     nextUrl.pathname.startsWith(route)
@@ -40,7 +41,7 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, request.url));
   }
 
-  if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+  if (!isLoggedIn && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -48,7 +49,7 @@ export const middleware = async (request: NextRequest) => {
     const allowedRoutes = roleBasedRoutes[userRole || ""] || [];
     const isAllowed = allowedRoutes.includes(nextUrl.pathname);
 
-    if (!isAllowed && !isPublicRoute && !isAuthRoute) {
+    if (!isAllowed && !isAuthRoute) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

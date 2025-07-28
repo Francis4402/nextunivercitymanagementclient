@@ -1,10 +1,4 @@
-
-
-export type TUserName = {
-    firstName: string;
-    middleName: string;
-    lastName: string;
-};
+import { TUserName } from "./user";
 
 
 export interface IFacultyForm {

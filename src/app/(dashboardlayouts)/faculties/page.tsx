@@ -6,6 +6,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { getAllFaculty } from '@/services/Faculty';
 import { DashboardTable } from '../utils/table';
 import Image from 'next/image';
+import { TUserName } from '@/types/user';
 
 const Faculties = () => {
 
@@ -39,9 +40,15 @@ const Faculties = () => {
       cell: ({ row }) => <div className="text-left">{row.getValue("designation")}</div>,
     },
     {
-      accessorKey: "fullName",
+      accessorKey: "name",
       header: "Full Name",
-      cell: ({ row }) => <div className="text-left">{row.getValue("fullName")}</div>,
+      cell: ({ row }) => {
+        const value = row.getValue("name") as TUserName;
+        const fullName = value
+        ? `${value.firstName} ${value.middleName} ${value.lastName}`
+        : "N/A";
+        return <div className="text-left">{fullName}</div>;
+      }
     },
     {
       accessorKey: "email",

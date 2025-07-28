@@ -1,6 +1,6 @@
 "use client"
 
-import { IAdminPayload, IAdmin } from "@/types/user";
+import { IAdminPayload, IAdmin, TUserName } from "@/types/user";
 import { DashboardTable } from "../utils/table";
 import { useEffect, useState } from "react";
 import { getAllAdmins, updateAdmins, deleteAdmin } from "@/services/Admin";
@@ -133,14 +133,20 @@ const Admins = () => {
           </div>,
         },
         {
+            accessorKey: "name",
+            header: "Full Name",
+            cell: ({ row }) => {
+              const value = row.getValue("name") as TUserName;
+              const fullName = value
+              ? `${value.firstName} ${value.middleName} ${value.lastName}`
+              : "N/A";
+              return <div className="text-left">{fullName}</div>;
+            }
+        },
+        {
           accessorKey: "designation",
           header: "Designation",
           cell: ({ row }) => <div className="text-left">{row.getValue("designation")}</div>,
-        },
-        {
-          accessorKey: "fullName",
-          header: "Full Name",
-          cell: ({ row }) => <div className="text-left">{row.getValue("fullName")}</div>,
         },
         {
           accessorKey: "email",

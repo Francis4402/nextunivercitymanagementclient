@@ -1,9 +1,5 @@
+import { TUserName } from "./user";
 
-export interface TUserName {
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-}
 
 export interface IGuardian {
     fatherName: string;

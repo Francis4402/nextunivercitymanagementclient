@@ -1,22 +1,20 @@
 "use client"
 
-import { BookOpenCheck, Boxes, LayoutDashboard, PanelsTopLeft, User2, Users } from "lucide-react"
+import { BookMarked, BookOpenCheck, Boxes, LayoutDashboard, LucideFileChartColumnIncreasing, PanelsTopLeft, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import Link from "next/link"
-import Image from "next/image"
 import { NavMain } from "./nav-main"
 import { NavRoutes } from "./nav-routes"
 import { useUser } from "@/context/UserContext"
+import { TeamSwitcher } from "./team-switcher"
+
+
 
 
 
@@ -24,34 +22,35 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
 
     const {user} = useUser();
 
-    console.log(user);
 
     const navRoutes = [
+      {
+        title: "Dashboard",
+        url: "/",
+        icon: LayoutDashboard,
+        isActive: true,
+      },
+      ...(user?.role === "superAdmin" || user?.role == "admin" ? [
         {
-          title: "Dashboard",
-          url: "/dashboard",
-          icon: LayoutDashboard,
-          isActive: true,
+          title: "Admins",
+          url: "/admins",
+          icon: User2,
+          isActive: false,
         },
         {
           title: "Students",
-          url: "/dashboard/students",
+          url: "/students",
           icon: Users,
           isActive: false,
         },
         {
           title: "Faculties",
-          url: "/dashboard/faculties",
+          url: "/faculties",
           icon: Boxes,
           isActive: false,
         },
-        {
-          title: "Admins",
-          url: "/dashboard/admins",
-          icon: User2,
-          isActive: false,
-        }
-      ];
+      ]: [])
+    ];
 
     const navMain = [
     {
@@ -61,27 +60,27 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         items: [
             {
               title: "Create A. Semester",
-              url: "/dashboard/create-a-semester",
+              url: "/create-a-semester",
             },
             {
               title: "Academic Semester",
-              url: "/dashboard/academic-semester",
+              url: "/academic-semester",
             },
             {
               title: "Create A. Faculty",
-              url: "/dashboard/create-a-faculty",
+              url: "/create-a-faculty",
             },
             {
               title: "Academic Faculty",
-              url: "/dashboard/academic-faculty",
+              url: "/academic-faculty",
             },
             {
               title: "Create A. Department",
-              url: "/dashboard/create-a-department",
+              url: "/create-a-department",
             },
             {
               title: "Academic Department",
-              url: "/dashboard/academic-department",
+              url: "/academic-department",
             },
         ]
     },
@@ -92,48 +91,73 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
       items: [
         {
           title: "Create Faculty",
-          url: "/dashboard/create-faculty",
+          url: "/create-faculty",
         },
         {
           title: "Create Student",
-          url: "/dashboard/create-student",
+          url: "/create-student",
         },
         ...(user?.role === "superAdmin"
           ? [{
             title: "Create Admin",
-            url: "/dashboard/create-admin",
+            url: "/create-admin",
           },]
-          : [           
-          ]),
+          : []),
       ],
     },
+    {
+      title: "Semester Management",
+      url: "#",
+      icon: BookMarked,
+      items: [
+        {
+          title: "Semester Registration",
+          url: "/semester-registration",
+        },
+        {
+          title: "Semesters",
+          url: "/semesters",
+        }
+      ]
+    },
+    {
+      title: "Course Management",
+      url: "#",
+      icon: LucideFileChartColumnIncreasing,
+      items: [
+        {
+          title: "Create Course",
+          url: "/create-course",
+        }
+      ]
+    },
+    {
+      title: "Offered Courses",
+      url: "#",
+      icon: BookOpenCheck,
+      items: [
+        {
+          title: "Create Offered Course",
+          url: "/create-offered-courses",
+        }
+      ]
+    }
   ];
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton size={"lg"} asChild>
-                    <Link href={"/"}>
-                        <div className="flex items-center justify-center gap-4">
-                            <Image src={"/vercel.svg"} alt="Next.js logo" width={30} height={30} />
-
-                            <h2 className="font-bold text-base">Univercity Managment</h2>
-                        </div>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-        </SidebarMenu>
+        <TeamSwitcher />
       </SidebarHeader>
 
       <SidebarContent>
         <NavRoutes items={navRoutes} />
-        <NavMain items={navMain} />
+        {
+          user?.role === "superAdmin" || user?.role === "admin" ? <NavMain items={navMain} /> : null
+        }
       </SidebarContent>
 
       <SidebarFooter>
-
       </SidebarFooter>
 
       <SidebarRail/>
