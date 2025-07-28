@@ -11,3 +11,6 @@ export const createSemesterRValidationSchema = z.object({
     maxCredit: z.number(),
   }),
 });
+
+
+export type SemesterValidation = z.infer<typeof createSemesterRValidationSchema>;

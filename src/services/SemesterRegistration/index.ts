@@ -84,7 +84,7 @@ export const getSingleSemesterRegistration = async (id: string) => {
     }
 }
 
-export const updateSemesterRegistration = async (id: string, data: ISemesterRegistration) => {
+export const updateSemesterRegistration = async (id: string, data: { status?: string }) => {
     const token = await getValidToken();
 
     try {
@@ -102,6 +102,7 @@ export const updateSemesterRegistration = async (id: string, data: ISemesterRegi
         return res.json();
     } catch (error) {
         console.log(error);
+        throw error; 
     }
 }
 

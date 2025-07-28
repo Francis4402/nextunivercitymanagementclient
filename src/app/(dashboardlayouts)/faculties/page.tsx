@@ -35,11 +35,6 @@ const Faculties = () => {
       </div>,
     },
     {
-      accessorKey: "designation",
-      header: "Designation",
-      cell: ({ row }) => <div className="text-left">{row.getValue("designation")}</div>,
-    },
-    {
       accessorKey: "name",
       header: "Full Name",
       cell: ({ row }) => {
@@ -49,6 +44,11 @@ const Faculties = () => {
         : "N/A";
         return <div className="text-left">{fullName}</div>;
       }
+    },
+    {
+      accessorKey: "designation",
+      header: "Designation",
+      cell: ({ row }) => <div className="text-left">{row.getValue("designation")}</div>,
     },
     {
       accessorKey: "email",
@@ -62,12 +62,30 @@ const Faculties = () => {
     },
     {
       accessorKey: "dateOfBirth",
-      header: "Date of Birth",
+      header: "Date Of Birth",
       cell: ({ row }) => {
-        const value = row.getValue("dateOfBirth");
-        const date = typeof value === "string" || typeof value === "number" 
-        ? new Date(value).toLocaleDateString() : "";
-        return <div className='text-left'>{date}</div>
+          const value = row.getValue("dateOfBirth");
+          
+          if (!value || 
+              (typeof value !== 'string' && 
+               typeof value !== 'number' && 
+               !(value instanceof Date))) {
+              return <div className='text-left'>Not Yet Added</div>;
+          }
+          
+          const date = new Date(value);
+          
+          if (isNaN(date.getTime())) {
+              return <div className='text-left'>Invalid Date</div>;
+          }
+          
+          const options: Intl.DateTimeFormatOptions = { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+          };
+          const formattedDate = date.toLocaleDateString(undefined, options);
+          return <div className='text-left'>{formattedDate}</div>;
       }
     },
     {
@@ -77,7 +95,7 @@ const Faculties = () => {
     },
     {
       accessorKey: "emergencyContactNo",
-      header: "Emergency Contact No",
+      header: "Emergency ContactNo",
       cell: ({ row }) => <div className="text-left">{row.getValue("emergencyContactNo")}</div>,
     },
     {

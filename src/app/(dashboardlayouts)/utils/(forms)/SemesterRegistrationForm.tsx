@@ -13,20 +13,20 @@ import { ChevronDownIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { createSemesterRValidationSchema } from '../VSchemas/SemesterRValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { createSemesterRValidationSchema, SemesterValidation } from '../VSchemas/SemesterRValidation'
 import { createSemesterRegistration } from '@/services/SemesterRegistration'
-import { z } from 'zod'
+import { useRouter } from 'next/navigation'
 
-// Define the form type based on the schema
-type FormData = z.infer<typeof createSemesterRValidationSchema>
 
 const SemesterRegistrationForm = () => {
     const [semesterData, setSemesterData] = useState<IAcademicSemester[]>([]);
 
-    const form = useForm<FormData>({
+    const form = useForm({
         resolver: zodResolver(createSemesterRValidationSchema),
     });
+
+    const router = useRouter();
 
     const { formState: { isSubmitting } } = form;
 
@@ -45,7 +45,7 @@ const SemesterRegistrationForm = () => {
         fetchData();
     }, []);
 
-    const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const onSubmit: SubmitHandler<SemesterValidation> = async (data) => {
         try {
             console.log('Form data being submitted:', data);
             
@@ -53,7 +53,8 @@ const SemesterRegistrationForm = () => {
 
             if (res?.success) {
                 toast.success(res?.message);
-                form.reset(); // Reset form after successful submission
+                form.reset();
+                router.push("/semesters");
             } else {
                 toast.error(res?.message || 'Something went wrong');
             }

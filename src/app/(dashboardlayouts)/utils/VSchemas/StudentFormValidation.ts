@@ -63,3 +63,4 @@ export const createStudentValidationSchema = z.object({
 export type TUserName = z.infer<typeof studentSchema>;
 export type IGuardian = z.infer<typeof createGuardianValidationSchema>;
 export type ILocalGuardian = z.infer<typeof createLocalGuardianValidationSchema>;
+export type StudentValidation = z.infer<typeof createStudentValidationSchema>;

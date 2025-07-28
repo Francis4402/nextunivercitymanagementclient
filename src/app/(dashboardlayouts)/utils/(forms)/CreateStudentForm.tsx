@@ -16,8 +16,8 @@ import { IAdepartment } from '@/types/adepartmenttype'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronDownIcon, Upload } from 'lucide-react'
 import React, { useEffect, useState, useRef } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { createStudentValidationSchema } from '../VSchemas/StudentFormValidation'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { createStudentValidationSchema, StudentValidation } from '../VSchemas/StudentFormValidation'
 import { toast } from 'sonner'
 import { ICreateStudentPayload } from '@/types/studenttypes'
 import { createStudent } from '@/services/Students'
@@ -122,7 +122,7 @@ const CreateStudentForm = () => {
         }
     };
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const onSubmit: SubmitHandler<StudentValidation> = async (data) => {
         try {
             const formData = new FormData();
             
