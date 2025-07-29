@@ -1,8 +1,11 @@
+import CreateCourseForm from '@/app/(dashboardlayouts)/utils/(forms)/CreateCourseForm'
 import React from 'react'
 
 const CreateCourse = () => {
   return (
-    <div>CreateCourse</div>
+    <div>
+      <CreateCourseForm />
+    </div>
   )
 }
 
