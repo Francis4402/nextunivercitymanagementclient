@@ -1,7 +1,7 @@
 "use server"
 
 import { getValidToken } from "@/lib/verifyToken";
-import { ICourse } from "@/types/coursesType";
+import { ICourse, IPrerequisite } from "@/types/coursesType";
 import { revalidateTag } from "next/cache";
 
 
@@ -87,15 +87,20 @@ export const getSingleCourse = async (id: string) => {
 }
 
 
-export const updateCourse = async (courseData: ICourse, courseId: string) => {
+export const updateCourse = async (
+    courseId: string,
+    courseData: {
+      preRequisiteCourses?: IPrerequisite[]; // ✅ accept object format
+    }
+  ) => {
     const token = await getValidToken();
   
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/${courseId}`, {
         method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${token}`,
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
         },
         body: JSON.stringify(courseData),
       });
@@ -105,8 +110,9 @@ export const updateCourse = async (courseData: ICourse, courseId: string) => {
       return res.json();
     } catch (error) {
       console.log(error);
+      throw new Error("Failed to update course");
     }
-};
+  };
 
 export const deleteCourse = async (courseId: string) => {
     const token = await getValidToken();

@@ -127,7 +127,11 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
       items: [
         {
           title: "Create Course",
-          url: "/create-course",
+          url: "/create-course"
+        },
+        {
+          title: "All Courses",
+          url: "/all-courses"
         }
       ]
     },

@@ -19,6 +19,7 @@ export const facultyRoutes = [
     "/create-offered-courses",
     "/academic-department", 
     "/create-a-department",
+    "/all-courses",
     "/students",
     "/faculties",
     "/admins"
@@ -40,6 +41,7 @@ export const superAdminRoutes = [
     "/create-offered-courses",
     "/academic-department", 
     "/create-a-department",
+    "/all-courses",
     "/students",
     "/faculties",
     "/admins"
@@ -60,6 +62,7 @@ export const adminRoutes = [
     "/create-offered-courses",
     "/academic-department", 
     "/create-a-department",
+    "/all-courses",
     "/students",
     "/faculties",
     "/admins"

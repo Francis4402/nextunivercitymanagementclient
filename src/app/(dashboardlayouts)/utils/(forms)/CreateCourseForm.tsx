@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select"
 
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation'
 
 
 const CreateCourseForm = () => {
@@ -37,6 +38,8 @@ const CreateCourseForm = () => {
             isDeleted: false
         }
     });
+
+    const router = useRouter();
 
     const { formState: { isSubmitting } } = form;
 
@@ -100,6 +103,7 @@ const CreateCourseForm = () => {
           if (res?.success === true) {
             toast.success(res?.message || 'Course created successfully!');
             form.reset();
+            router.push("/all-courses");
           } else {
             toast.error(res?.message || 'Something went wrong');
           }
