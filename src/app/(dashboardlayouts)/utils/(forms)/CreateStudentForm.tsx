@@ -14,7 +14,7 @@ import { getAllDepartments } from '@/services/ADepartment'
 import { IAcademicSemester } from '@/types/academicsemestertype'
 import { IAdepartment } from '@/types/adepartmenttype'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ChevronDownIcon, Upload } from 'lucide-react'
+import { CalendarIcon, Upload } from 'lucide-react'
 import React, { useEffect, useState, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { createStudentValidationSchema, StudentValidation } from '../VSchemas/StudentFormValidation'
@@ -271,14 +271,13 @@ const CreateStudentForm = () => {
                                                     className="justify-between font-normal w-full"
                                                 >
                                                     { field.value ? new Date(field.value).toLocaleDateString() : "Select Date"}
-                                                    <ChevronDownIcon />
+                                                    <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 </Button>
                                            </PopoverTrigger>
                                             <PopoverContent>
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value ? new Date(field.value) : undefined}
-                                                    captionLayout="dropdown"
                                                     onSelect={(date) => field.onChange(date?.toISOString())}
                                                 />
                                             </PopoverContent>

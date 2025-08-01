@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { getAllSemesters } from '@/services/AcademicSemester'
 import { IAcademicSemester } from '@/types/academicsemestertype'
-import { ChevronDownIcon } from 'lucide-react'
+import { CalendarIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -140,14 +140,13 @@ const SemesterRegistrationForm = () => {
                                                     type="button"
                                                 >
                                                     {field.value ? new Date(field.value).toLocaleDateString() : "Select Date"}
-                                                    <ChevronDownIcon />
+                                                    <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent>
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value ? new Date(field.value) : undefined}
-                                                    captionLayout="dropdown"
                                                     onSelect={(date) => {
                                                         if (date) {
                                                             field.onChange(date.toISOString());
@@ -175,14 +174,13 @@ const SemesterRegistrationForm = () => {
                                                     type="button"
                                                 >
                                                     {field.value ? new Date(field.value).toLocaleDateString() : "Select Date"}
-                                                    <ChevronDownIcon />
+                                                    <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent>
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value ? new Date(field.value) : undefined}
-                                                    captionLayout="dropdown"
                                                     onSelect={(date) => {
                                                         if (date) {
                                                             field.onChange(date.toISOString());

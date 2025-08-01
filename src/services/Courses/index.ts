@@ -25,7 +25,7 @@ export const createCourse = async (data: ICourse) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export const getAllCourses = async () => {
     try {
@@ -55,7 +55,7 @@ export const getAllCourses = async () => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export const getSingleCourse = async (id: string) => {
     try {
@@ -84,7 +84,7 @@ export const getSingleCourse = async (id: string) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 
 export const updateCourse = async (
@@ -162,5 +162,30 @@ export const assignFaculty = async (courseId: string, facultyId: string[]) => {
         };
     } catch (error) {
         console.error("assignFaculty error:", error);
+    }
+};
+
+
+
+export const getCourseFacutly = async (courseId: string) => {
+    const token = await getValidToken();
+
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/${courseId}/get-faculties`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`,
+            },
+            next: {
+                tags: ["courses"]
+            }
+        });
+
+        const data = await res.json();
+
+        return data;
+    } catch (error) {
+        console.log(error);
     }
 };

@@ -2,6 +2,7 @@ import { TUserName } from "./user";
 
 
 export interface IFacultyForm {
+    _id?: string;
     designation: string;
     name: TUserName;
     gender: 'male' | 'female' | 'other';

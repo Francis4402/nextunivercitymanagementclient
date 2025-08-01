@@ -3,7 +3,8 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Metadata } from 'next';
 import { AppSidebar } from './utils/app-sidebar';
 import { SiteHeader } from './utils/site-header';
-
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
 
 
 export const metadata: Metadata = {
