@@ -17,6 +17,7 @@ export interface IFacultyForm {
 }
 
 export interface IFacultyPayload {
+    _id?: string;
     password?: string;
     faculty: IFacultyForm;
 }

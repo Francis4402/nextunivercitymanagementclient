@@ -90,7 +90,7 @@ export const getSingleCourse = async (id: string) => {
 export const updateCourse = async (
     courseId: string,
     courseData: {
-      preRequisiteCourses?: IPrerequisite[]; // ✅ accept object format
+      preRequisiteCourses?: IPrerequisite[];
     }
   ) => {
     const token = await getValidToken();
@@ -131,5 +131,36 @@ export const deleteCourse = async (courseId: string) => {
       return res.json();
     } catch (error) {
       console.log(error);
+    }
+};
+
+
+export const assignFaculty = async (courseId: string, facultyId: string[]) => {
+    const token = await getValidToken();
+    
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/${courseId}/assign-faculties`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`,
+            },
+            body: JSON.stringify({ 
+                faculties: facultyId
+            }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || `HTTP ${res.status}: Failed to assign faculty`);
+        }
+
+        return {
+            success: true,
+            ...data
+        };
+    } catch (error) {
+        console.error("assignFaculty error:", error);
     }
 };

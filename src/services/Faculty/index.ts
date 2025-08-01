@@ -88,7 +88,7 @@ export const getSingleFaculty = async (id: string) => {
 
 export const updateFaculty = async (studentData: { name: string }, faclutyId: string) => {
     const token = await getValidToken();
-  
+    
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/faculties/${faclutyId}`, {
         method: "PATCH",
