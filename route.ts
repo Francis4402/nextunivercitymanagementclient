@@ -1,7 +1,6 @@
 
 export const studentRoutes = [
     "/",
-    
 ]
 
 export const facultyRoutes = [
@@ -71,6 +70,7 @@ export const adminRoutes = [
 export const authRoutes = [
     "/login",
     "/register",
+    "/change-password",
 ]
 
 

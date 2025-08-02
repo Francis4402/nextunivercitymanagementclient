@@ -1,5 +1,7 @@
 "use server"
 
+import { getValidToken } from "@/lib/verifyToken";
+import { IChangePassword } from "@/types/user";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
@@ -29,8 +31,6 @@ export const loginUser = async (userData: FieldValues) => {
         console.log(error);
     }
 }
-
-
 
 
 
@@ -65,5 +65,30 @@ export const getNewToken = async () => {
         return res.json();
     } catch (error) {
         console.log(error);
+    }
+}
+
+
+export const changePassword = async (data: IChangePassword) => {
+
+    const token = await getValidToken();
+
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/change-password`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${token}`
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+
+        const result = await res.json();
+
+        return result;
+
+    } catch (error) {
+        console.log(error)
     }
 }

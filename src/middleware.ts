@@ -19,25 +19,35 @@ export const middleware = async (request: NextRequest) => {
   let user: any = null;
   let isLoggedIn = false;
   let userRole: string | undefined;
+  let needsPasswordChange = false;
 
+  const isChangePasswordRoute = nextUrl.pathname === "/change-password";
 
   if (token) {
     try {
       user = jwtDecode(token);
       isLoggedIn = true;
       userRole = user?.role;
+      needsPasswordChange = user?.needsPasswordChange;
     } catch (error) {
       console.log(error)
       isLoggedIn = false;
     }
   }
 
+  if (isChangePasswordRoute && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (isLoggedIn && needsPasswordChange && !isChangePasswordRoute) {
+    return NextResponse.redirect(new URL("/change-password", request.url));
+  }
 
   const isAuthRoute = authRoutes.some((route) =>
     nextUrl.pathname.startsWith(route)
   );
 
-  if (isAuthRoute && isLoggedIn) {
+  if (isAuthRoute && isLoggedIn && !isChangePasswordRoute) {
     return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, request.url));
   }
 
@@ -45,7 +55,7 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (isLoggedIn) {
+  if (isLoggedIn && !isChangePasswordRoute) {
     const allowedRoutes = roleBasedRoutes[userRole || ""] || [];
     const isAllowed = allowedRoutes.includes(nextUrl.pathname);
 

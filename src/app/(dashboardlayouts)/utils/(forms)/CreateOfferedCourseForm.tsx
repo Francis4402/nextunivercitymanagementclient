@@ -39,7 +39,6 @@ const CreateOfferedCourseForm = () => {
     const [selectAFaculty, setAFaculty] = useState<IAfacultyPayload | null>(null);
     const [courseFaculty, setCourseFaculty] = useState<ICoursePayload | null>(null);
 
-    console.log(selectAFaculty);
 
     const form = useForm<OfferedCourseValidation>({
         resolver: zodResolver(OfferedCourseValidationSchema),
@@ -231,7 +230,7 @@ const CreateOfferedCourseForm = () => {
                             <FormField control={form.control} name='academicFaculty' render={({field}) => (
                                 <FormItem>
                                     <FormLabel className="text-sm font-medium">Academic Faculty</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value || ''}>
+                                    <Select onValueChange={field.onChange} value={field.value || ''} disabled={!selectAFaculty}>
                                         <FormControl>
                                             <SelectTrigger className="h-10 w-full">
                                                 <SelectValue placeholder="Select A Faculty" />
@@ -302,7 +301,7 @@ const CreateOfferedCourseForm = () => {
                             <FormField control={form.control} name="faculty" render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Faculty Member</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value || ''}>
+                                    <Select onValueChange={field.onChange} value={field.value || ''} disabled={!courseFaculty}>
                                         <FormControl>
                                             <SelectTrigger className="h-10 w-full">
                                                 <SelectValue placeholder="Select Faculty Member" />

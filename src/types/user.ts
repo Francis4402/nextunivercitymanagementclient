@@ -1,6 +1,7 @@
 export interface IUser {
     userId: string;
     role: 'superAdmin' | 'admin' | 'student' | 'faculty';
+    needsPasswordChange: boolean;
     iat: number;
     exp: number;
 }
@@ -36,4 +37,11 @@ export interface IAd extends IAdmin {
   id: string;
   user: string;
   isDeleted?: boolean;
+}
+
+
+
+export interface IChangePassword {
+  oldPassword: string;
+  newPassword: string;
 }

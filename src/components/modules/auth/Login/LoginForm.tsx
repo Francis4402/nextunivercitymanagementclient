@@ -44,6 +44,7 @@ export function LoginForm({
         await refreshUser();
 
         router.push("/");
+
       } else {
         toast.error(res?.message);
       }
