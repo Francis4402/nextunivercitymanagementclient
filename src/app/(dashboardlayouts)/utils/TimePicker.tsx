@@ -2,86 +2,70 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Clock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 interface TimePickerProps {
-  value: string; // Format: "HH:MM" (24-hour) or "HH:MM AM/PM" (12-hour)
-  onChange: (value: string) => void;
+  value: string; // Always in "HH:MM" format (24-hour)
+  onChange: (value: string) => void; // Always returns "HH:MM" format
   className?: string;
-  use12Hour?: boolean; // Add this prop to toggle between 12/24 hour format
+  use12Hour?: boolean; // Only affects display, not output format
 }
 
 export const TimePicker = ({ 
   value, 
   onChange, 
   className, 
-  use12Hour = true // Default to 12-hour format
+  use12Hour = false // Default to 24-hour output
 }: TimePickerProps) => {
   const [open, setOpen] = useState(false);
   
-  // Parse the time value
-  const parseTime = (timeStr: string) => {
-    if (!timeStr) return { hours: 0, minutes: 0, period: 'AM' };
+  // Parse "HH:MM" format into hours, minutes
+  const parseTime = useCallback((timeStr: string) => {
+    if (!timeStr) return { hours: 0, minutes: 0 };
     
-    if (use12Hour) {
-      const [time, period] = timeStr.split(' ');
-      const [hours, minutes] = time.split(':').map(Number);
-      return { 
-        hours: period === 'PM' && hours !== 12 ? hours + 12 : hours === 12 && period === 'AM' ? 0 : hours,
-        minutes,
-        period: period || 'AM'
-      };
-    } else {
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      return { 
-        hours, 
-        minutes,
-        period: hours >= 12 ? 'PM' : 'AM'
-      };
-    }
-  };
+    const [hoursStr, minutesStr] = timeStr.split(':');
+    return {
+      hours: parseInt(hoursStr || '0', 10) % 24,
+      minutes: parseInt(minutesStr || '0', 10) % 60
+    };
+  }, []);
 
-  const { hours: initialHours, minutes: initialMinutes, period: initialPeriod } = parseTime(value);
+  // Format hours and minutes into "HH:MM" string
+  const formatTime = useCallback((hours: number, minutes: number) => {
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  }, []);
+
+  const { hours: initialHours, minutes: initialMinutes } = parseTime(value);
   const [hours, setHours] = useState(initialHours);
   const [minutes, setMinutes] = useState(initialMinutes);
-  const [period, setPeriod] = useState<'AM' | 'PM'>(initialPeriod as 'AM' | 'PM');
+
+  // Update internal state when value prop changes
+  useEffect(() => {
+    const { hours: newHours, minutes: newMinutes } = parseTime(value);
+    setHours(newHours);
+    setMinutes(newMinutes);
+  }, [value, parseTime]);
 
   const handleHourChange = (hour: number) => {
-    setHours(hour);
-    updateTime(hour, minutes, period);
+    const newHours = hour % 24;
+    setHours(newHours);
+    onChange(formatTime(newHours, minutes));
   };
 
   const handleMinuteChange = (minute: number) => {
-    setMinutes(minute);
-    updateTime(hours, minute, period);
+    const newMinutes = minute % 60;
+    setMinutes(newMinutes);
+    onChange(formatTime(hours, newMinutes));
   };
 
-  const handlePeriodChange = (newPeriod: 'AM' | 'PM') => {
-    setPeriod(newPeriod);
-    updateTime(hours, minutes, newPeriod);
-  };
-
-  const updateTime = (h: number, m: number, p: 'AM' | 'PM') => {
-    if (use12Hour) {
-      const displayHours = p === 'PM' && h !== 12 ? h - 12 : p === 'AM' && h === 12 ? 0 : h;
-      onChange(`${displayHours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${p}`);
-    } else {
-      const twentyFourHours = p === 'PM' && h !== 12 ? h + 12 : p === 'AM' && h === 12 ? 0 : h;
-      onChange(`${twentyFourHours.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
-    }
-  };
-
-  const displayHours = use12Hour 
-    ? period === 'PM' && hours !== 12 
-      ? hours - 12 
-      : period === 'AM' && hours === 12 
-        ? 0 
-        : hours
-    : hours;
-
-  const displayValue = use12Hour
-    ? `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`
-    : `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  // Convert to 12-hour format for display only
+  const displayTime = use12Hour
+    ? (() => {
+        const displayHours = hours % 12 || 12;
+        const period = hours >= 12 ? 'PM' : 'AM';
+        return `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${period}`;
+      })()
+    : formatTime(hours, minutes);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -95,27 +79,24 @@ export const TimePicker = ({
           )}
         >
           <Clock className="mr-2 h-4 w-4" />
-          {value ? displayValue : "Select time"}
+          {value ? displayTime : "Select time"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-2">
         <div className="flex gap-4">
           {/* Hours */}
           <div className="flex flex-col items-center max-h-[200px] overflow-y-auto">
-            {Array.from({ length: use12Hour ? 12 : 24 }).map((_, i) => {
-              const hour = use12Hour ? i + 1 : i;
-              return (
-                <Button
-                  key={`hour-${hour}`}
-                  variant={hours === hour ? "default" : "ghost"}
-                  size="sm"
-                  className="w-full"
-                  onClick={() => handleHourChange(hour)}
-                >
-                  {hour.toString().padStart(2, '0')}
-                </Button>
-              );
-            })}
+            {Array.from({ length: 24 }).map((_, i) => (
+              <Button
+                key={`hour-${i}`}
+                variant={hours === i ? "default" : "ghost"}
+                size="sm"
+                className="w-full"
+                onClick={() => handleHourChange(i)}
+              >
+                {i.toString().padStart(2, '0')}
+              </Button>
+            ))}
           </div>
           
           {/* Minutes */}
@@ -132,28 +113,6 @@ export const TimePicker = ({
               </Button>
             ))}
           </div>
-
-          {/* AM/PM Selector */}
-          {use12Hour && (
-            <div className="flex flex-col items-center max-h-[200px]">
-              <Button
-                variant={period === 'AM' ? "default" : "ghost"}
-                size="sm"
-                className="w-full"
-                onClick={() => handlePeriodChange('AM')}
-              >
-                AM
-              </Button>
-              <Button
-                variant={period === 'PM' ? "default" : "ghost"}
-                size="sm"
-                className="w-full"
-                onClick={() => handlePeriodChange('PM')}
-              >
-                PM
-              </Button>
-            </div>
-          )}
         </div>
       </PopoverContent>
     </Popover>

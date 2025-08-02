@@ -9,12 +9,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { getAllDepartments } from '@/services/ADepartment'
-import { getAllFaculties } from '@/services/AFaculty'
+import { getAllDepartments, getSingleDepartments } from '@/services/ADepartment'
 import { getAllCourses, getCourseFacutly } from '@/services/Courses'
 import { getAllSemesterRegistrations } from '@/services/SemesterRegistration'
 import { IAdepartment } from '@/types/adepartmenttype'
-import { IAfaculty } from '@/types/afacultytype'
+import { IAfaculty, IAfacultyPayload } from '@/types/afacultytype'
 import { ICourse, ICoursePayload } from '@/types/coursesType'
 import { ISemesterRegistration } from '@/types/semsterRegistration'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -37,18 +36,19 @@ const CreateOfferedCourseForm = () => {
     const [departmentData, setDepartmentData] = useState<IAdepartment[]>([]);
     const [SemesterRegistration, setSemsterRegistration] = useState<ISemesterRegistration[]>([]);
     const [course, setCourse] = useState<ICourse[]>([]);
-    const [selectAFaculty, setAFaculty] = useState<IAfaculty[]>([]);
+    const [selectAFaculty, setAFaculty] = useState<IAfacultyPayload | null>(null);
     const [courseFaculty, setCourseFaculty] = useState<ICoursePayload | null>(null);
 
+    console.log(selectAFaculty);
 
     const form = useForm<OfferedCourseValidation>({
         resolver: zodResolver(OfferedCourseValidationSchema),
         defaultValues: {
-            section: 1,
-            maxCapacity: 1,
+            section: 0,
+            maxCapacity: 0,
             days: [],
-            startTime: "09:00",
-            endTime: "10:00"
+            startTime: "00:00",
+            endTime: "00:00"
         }
     });
 
@@ -60,7 +60,6 @@ const CreateOfferedCourseForm = () => {
                 loadSemesterRegistration(),
                 loadDepartmentData(),
                 loadCourseData(),
-                loadAFacultyData(),
             ]);
         } catch (error) {
             console.error("Error loading initial data:", error);
@@ -96,33 +95,46 @@ const CreateOfferedCourseForm = () => {
         })
     }
 
-    const loadAFacultyData = async () => {
-        await getAllFaculties().then((res) => {
+    const loadAFacultyData = async (id: string) => {
+        if (!id) {
+            setAFaculty(null);
+            return;
+        }
+        
+        try {
+            const res = await getSingleDepartments(id);
             setAFaculty(res.data);
-        }).catch((err) => {
-            console.log(err);
-        })
+        } catch (error) {
+            console.error("Error loading course faculty:", error);
+            setAFaculty(null);
+        }
     }
 
 
-    const loadCourseFacultyData = async (courseId: string) => {
-        if (!courseId) {
+    const loadCourseFacultyData = async (id: string) => {
+        if (!id) {
             setCourseFaculty(null);
             return;
         }
         
         try {
-            const res = await getCourseFacutly(courseId);
+            const res = await getCourseFacutly(id);
             setCourseFaculty(res.data);
         } catch (error) {
             console.error("Error loading course faculty:", error);
             setCourseFaculty(null);
         }
     }
+    
 
-    const handleCourseChange = (courseId: string) => {
+    const handleFacultyData = (id: string) => {
         form.setValue('faculty', '');
-        loadCourseFacultyData(courseId);
+        loadCourseFacultyData(id);
+    }
+
+    const handleLoadAFacultyData = (id: string) => {
+        form.setValue('academicFaculty', '');
+        loadAFacultyData(id);
     }
 
     const onSubmit: SubmitHandler<OfferedCourseValidation> = async (data) => {
@@ -186,37 +198,13 @@ const CreateOfferedCourseForm = () => {
                                 </FormItem>
                             )} />
 
-                            <FormField control={form.control} name='academicFaculty' render={({field}) => (
-                                <FormItem>
-                                    <FormLabel className="text-sm font-medium">Academic Faculty</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value || ''}>
-                                        <FormControl>
-                                            <SelectTrigger className="h-10 w-full">
-                                                <SelectValue placeholder="Select A Faculty" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {
-                                                    selectAFaculty.map((items: IAfaculty) => {
-                                                        return (
-                                                            <SelectItem key={items._id} value={items._id!}>
-                                                                {items.name}
-                                                            </SelectItem>
-                                                        )
-                                                    })
-                                                }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )} />
-                            
                             <FormField control={form.control} name='academicDepartment' render={({field}) => (
                                 <FormItem>
                                     <FormLabel className="text-sm font-medium">Academic Department</FormLabel>
-                                    <Select onValueChange={field.onChange} value={field.value || ''}>
+                                    <Select onValueChange={(value) => {
+                                                field.onChange(value);
+                                                handleLoadAFacultyData(value);
+                                            }}  value={field.value || ''}>
                                         <FormControl>
                                             <SelectTrigger className="h-10 w-full">
                                                 <SelectValue placeholder="Select Academic Department" />
@@ -240,12 +228,53 @@ const CreateOfferedCourseForm = () => {
                                 </FormItem>
                             )} />
 
+                            <FormField control={form.control} name='academicFaculty' render={({field}) => (
+                                <FormItem>
+                                    <FormLabel className="text-sm font-medium">Academic Faculty</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value || ''}>
+                                        <FormControl>
+                                            <SelectTrigger className="h-10 w-full">
+                                                <SelectValue placeholder="Select A Faculty" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {selectAFaculty?.academicFaculty ? (
+                                                    Array.isArray(selectAFaculty.academicFaculty) ? (
+                                                        selectAFaculty.academicFaculty.map((faculty: IAfaculty) => (
+                                                            faculty._id && (
+                                                                <SelectItem key={faculty._id} value={faculty._id}>
+                                                                    {faculty.name}
+                                                                </SelectItem>
+                                                            )
+                                                        ))
+                                                    ) : (
+                                                        selectAFaculty.academicFaculty._id && (
+                                                            <SelectItem value={selectAFaculty.academicFaculty._id}>
+                                                                {selectAFaculty.academicFaculty.name}
+                                                            </SelectItem>
+                                                        )
+                                                    )
+                                                ) : (
+                                                    <SelectItem value="no-faculty" disabled>
+                                                        No faculty available
+                                                    </SelectItem>
+                                                )}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )} />
+                            
+                            
+
                             <FormField control={form.control} name='course' render={({field}) => (
                                 <FormItem>
                                     <FormLabel className="text-sm font-medium">Courses</FormLabel>
                                     <Select onValueChange={(value) => {
                                                 field.onChange(value);
-                                                handleCourseChange(value);
+                                                handleFacultyData(value);
                                             }}  value={field.value || ''}>
                                         <FormControl>
                                             <SelectTrigger className="h-10 w-full">
@@ -410,10 +439,11 @@ const CreateOfferedCourseForm = () => {
                                 <FormItem className="flex flex-col">
                                     <FormLabel>Start Time</FormLabel>
                                     <FormControl>
-                                    <TimePicker
-                                        value={field.value || ''}
-                                        onChange={field.onChange}
-                                    />
+                                        <TimePicker
+                                            value={field.value || ''}
+                                            onChange={field.onChange}
+                                            use12Hour={true}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -430,6 +460,7 @@ const CreateOfferedCourseForm = () => {
                                     <TimePicker
                                         value={field.value || ''}
                                         onChange={field.onChange}
+                                        use12Hour={true}
                                     />
                                     </FormControl>
                                     <FormMessage />
