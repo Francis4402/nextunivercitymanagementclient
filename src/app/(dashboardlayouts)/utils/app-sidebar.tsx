@@ -1,6 +1,6 @@
 "use client"
 
-import { BookMarked, BookOpenCheck, Boxes, LayoutDashboard, LucideFileChartColumnIncreasing, PanelsTopLeft, User2, Users } from "lucide-react"
+import { BookMarked, BookOpen, BookOpenCheck, Boxes, LayoutDashboard, LucideFileChartColumnIncreasing, PanelsTopLeft, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -48,8 +48,16 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
           url: "/faculties",
           icon: Boxes,
           isActive: false,
-        },
-      ]: [])
+        }
+      ]: []),
+        ...(user?.role === "student" ? [
+          {
+            title: "Offered Courses",
+            url: "/offered-courses",
+            icon: BookOpenCheck,
+            isActive: false,
+          }
+        ]: []),
     ];
 
     const navMain = [
@@ -138,12 +146,12 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     {
       title: "Offered Courses",
       url: "#",
-      icon: BookOpenCheck,
+      icon: BookOpen,
       items: [
         {
           title: "Create Offered Course",
           url: "/create-offered-courses",
-        }
+        },
       ]
     }
   ];

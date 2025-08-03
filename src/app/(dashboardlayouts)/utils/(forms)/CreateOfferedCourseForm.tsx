@@ -162,7 +162,7 @@ const CreateOfferedCourseForm = () => {
         <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-xl font-bold text-center">Create Academic Faculty</CardTitle>
         </CardHeader>
-        <CardContent className='w-full mx-auto'>
+        <CardContent>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10 w-full">
                     

@@ -1,6 +1,7 @@
 
 export const studentRoutes = [
     "/",
+    "/offered-courses",
 ]
 
 export const facultyRoutes = [
@@ -8,6 +9,7 @@ export const facultyRoutes = [
     "/create-faculty", 
     "/create-student", 
     "/create-admin", 
+    "/offered-courses",
     "/academic-semester", 
     "/create-a-semester", 
     "/academic-faculty", 
@@ -30,6 +32,7 @@ export const superAdminRoutes = [
     "/create-faculty", 
     "/create-student", 
     "/create-admin", 
+    "/offered-courses",
     "/academic-semester", 
     "/create-a-semester", 
     "/academic-faculty", 
@@ -50,7 +53,7 @@ export const adminRoutes = [
     "/", 
     "/create-faculty", 
     "/create-student", 
-    "/create-admin", 
+    "/create-admin",
     "/academic-semester", 
     "/create-a-semester", 
     "/academic-faculty", 

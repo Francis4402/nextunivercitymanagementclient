@@ -18,7 +18,6 @@ const Students = () => {
     });
   }, []);
 
-  
 
 
   const columns: ColumnDef<ICreateStudentPayload>[] = [

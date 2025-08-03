@@ -3,7 +3,7 @@ import React from 'react'
 
 const CreateOfferedCourses = () => {
   return (
-    <div className="flex items-center justify-center mt-20">
+    <div>
       <CreateOfferedCourseForm />
     </div>
   )
