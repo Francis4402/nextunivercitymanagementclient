@@ -9,3 +9,5 @@ export const ADepartmentValidationSchema = z.object({
         message: "Please select a faculty"
     }).optional()
 })
+
+export type IAdepartmentValidationSchema = z.infer<typeof ADepartmentValidationSchema>;

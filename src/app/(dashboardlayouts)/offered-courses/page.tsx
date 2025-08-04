@@ -1,14 +1,19 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getMyOfferedCourses } from "@/services/OfferedCourse";
 import { IOfferedCourseInfo } from "@/types/OfferedCoursetypes";
+import EnRolledButton from "../utils/EnRolledButton";
+import { getEnrolledCourses } from "@/services/EnrolledCourse";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
 
 
 const OfferedCourses = async () => {
 
   const offeredCourses = await getMyOfferedCourses();
 
-  
+  const enrolledCourses = await getEnrolledCourses();
+
 
   return (
     <div className="grid sm:grid-cols-2 gap-2 w-full">
@@ -19,6 +24,15 @@ const OfferedCourses = async () => {
             <Card key={courses._id}>
               <CardHeader>
                 <CardTitle>{courses.course.title}</CardTitle>
+                <CardAction>
+                  <Badge>
+                    {
+                      enrolledCourses.data[0].isCompleted === true ? (
+                        <span>Complete</span>
+                      ): <span>In Progress</span>
+                    }
+                  </Badge>
+                </CardAction>
               </CardHeader>
               <CardContent>
 
@@ -30,7 +44,13 @@ const OfferedCourses = async () => {
                 </div>
                 
                 <CardAction>
-                  <Button>Enroll</Button>
+                  {
+                    enrolledCourses.data[0].isEnrolled === true ? (
+                      <Button>Enrolled</Button>
+                    ) : (
+                      <EnRolledButton id={courses._id} />
+                    )
+                  }
                 </CardAction>
               </CardContent>
             </Card>

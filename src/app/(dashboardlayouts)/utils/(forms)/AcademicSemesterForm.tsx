@@ -46,7 +46,7 @@ const AcademicSemesterForm = () => {
 
             if (res?.success) {
                 toast.success(res?.message);
-                router.push("/dashboard/academic-semester");
+                router.push("/academic-semester");
             } else {
                 toast.error(res?.message);
             }

@@ -6,3 +6,5 @@ export const AFacultyValidationSchema = z.object({
         message: "Please enter a valid name",
     }),
 })
+
+export type IAfacultyValidationSchema = z.infer<typeof AFacultyValidationSchema>;

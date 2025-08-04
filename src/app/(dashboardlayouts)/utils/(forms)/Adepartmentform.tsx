@@ -1,11 +1,10 @@
 "use client"
 
-import { IAdepartment } from '@/types/adepartmenttype';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { ADepartmentValidationSchema } from '../VSchemas/ADepartmentValidation';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ADepartmentValidationSchema, IAdepartmentValidationSchema } from '../VSchemas/ADepartmentValidation';
 import { createADepartment } from '@/services/ADepartment';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,13 +34,13 @@ const Adepartmentform = () => {
 
     const {formState: { isSubmitting }} = form;
 
-    const onSubmit = async (departmentData: IAdepartment) => {
+    const onSubmit: SubmitHandler<IAdepartmentValidationSchema> = async (departmentData) => {
         try {
             const res = await createADepartment(departmentData);
 
             if (res?.success) {
                 toast.success(res?.message);
-                router.push("/dashboard/academic-department");
+                router.push("/academic-department");
             } else {
                 toast.error(res?.message);
             }

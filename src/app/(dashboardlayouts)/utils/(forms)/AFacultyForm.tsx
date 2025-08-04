@@ -4,9 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { AFacultyValidationSchema } from '../VSchemas/AFacultyValidation'
-import { IAfaculty } from '@/types/afacultytype'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { AFacultyValidationSchema, IAfacultyValidationSchema } from '../VSchemas/AFacultyValidation'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
@@ -24,13 +23,15 @@ const AFacultyForm = () => {
 
     const {formState: { isSubmitting }} = form;
 
-    const onSubmit = async (facultyData: IAfaculty) => {
+    const onSubmit: SubmitHandler<IAfacultyValidationSchema> = async (facultyData) => {
         try {
             const res = await createAcademicFaculty(facultyData);
 
+            console.log(res);
+
             if (res?.success) {
                 toast.success(res?.message);
-                router.push("/dashboard/academic-faculty");
+                router.push("/academic-faculty");
             } else {
                 toast.error(res?.message);
             }

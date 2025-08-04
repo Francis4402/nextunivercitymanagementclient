@@ -15,6 +15,7 @@ export const createAcademicFaculty = async (facultyData: IAfaculty) => {
             body: JSON.stringify(facultyData),
             headers: {
                 'Authorization': `${token}`,
+                'Content-Type': 'application/json',
             },
         });
 
